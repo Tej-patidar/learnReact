@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 const index = () => {
 const [title, setTitle] = useState("")
 const [desc, setDesc] = useState("")
+const [tasks, setTasks] = useState("")
 
 const todocreate=(e)=>{
 e.preventDefault();
@@ -13,6 +14,11 @@ const todo={
   desc,
 
 }
+const copytasks=[...tasks];
+copytasks.push(todo);
+setTasks(copytasks);
+
+// Shorthand of three lines is -- setTask[...task,todo]
 console.log(todo);
 setTitle(''),
 setDesc('')
@@ -22,7 +28,17 @@ setDesc('')
 //     console.log('changed');
 // console.log(v.target.value);
 //   }
-
+let taskslist=( <h4 className="p-2 bg-light">No task found in the Tasklist</h4> )
+if(tasks.length > 0){
+  taskslist=tasks.map((task,index)=>(
+    <li className="d-flex justify-content-between p-4">{task.title} <i onClick={()=> deletehandler(task.id)} className="ri-delete-bin-2-fill text-danger"></i></li>
+  )
+)}
+const deletehandler=(id)=>{
+const copytasks=tasks.filter((task)=> task.id !== id);
+console.log(copytasks);
+setTasks(copytasks)
+}
   return (
     <div className="container w-50 bg-light">
       <form onSubmit={todocreate}>
@@ -36,7 +52,7 @@ setDesc('')
 
       <hr />
       <h2>Pending Task</h2>
-     <li className="d-flex justify-content-between p-4">Item 1  <i className="ri-delete-bin-2-fill text-danger"></i></li>
+     {taskslist}
     </div>
   )
 }
